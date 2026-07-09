@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Directory – Pentecost Preparatory School</title>
+  <meta name="theme-color" content="#04112a">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/assets2/PPS BADGE.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<div class="announce-bar"><div class="marquee-track" id="announce-text"><span>Loading...</span></div></div>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="/"><img src="/assets2/PPS BADGE.jpg" alt="PPS">Pentecost Preparatory School</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/">Home</a></li><li><a href="/admissions">Admissions</a></li>
+      <li><a href="/news">News &amp; Events</a></li><li><a href="/staff" class="active">Staff</a></li>
+      <li><a href="/badges">Badges</a></li><li><a href="/gallery">Gallery</a></li>
+      <li><a href="/tours">Tours</a></li><li><a href="/contact">Contact</a></li>
+      <li><a href="/admissions" class="nav-cta">Apply Now →</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container page-hero-content">
+    <div class="breadcrumb"><a href="/">Home</a><span>/</span><span>Staff</span></div>
+    <h1>Staff <span style="color:var(--gold)">Directory</span></h1>
+    <p>Meet the dedicated educators shaping the next generation</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <!-- Search -->
+    <div style="max-width:400px; margin-bottom:2.5rem;" class="reveal">
+      <input type="text" id="staff-search" placeholder="🔍 Search staff by name or department..." oninput="filterStaff()">
+    </div>
+
+    <div class="grid-4" id="staff-grid">
+      <div class="spinner"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background: rgba(7,26,62,0.4); padding:3rem 0;">
+  <div class="container" style="text-align:center;">
+    <div class="reveal">
+      <h2 class="section-title">Join Our <span class="gold">Team</span></h2>
+      <p style="color:rgba(253,248,240,0.6); margin: 1rem 0 2rem; max-width:500px; margin-left:auto; margin-right:auto;">We are always looking for passionate, dedicated educators to join the PPS family.</p>
+      <a href="/contact" class="btn btn-primary">Contact HR Office</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div><div class="footer-brand"><img src="/assets2/PPS BADGE.jpg" alt="PPS"><span class="footer-brand-name">Pentecost Preparatory School</span></div><p class="footer-desc">God Our Victory. TnA Stadium, Western Region, Ghana.</p></div>
+      <div class="footer-col"><h4>Quick Links</h4><div class="footer-links"><a href="/">Home</a><a href="/admissions">Admissions</a><a href="/news">News</a><a href="/contact">Contact</a></div></div>
+    </div>
+    <div class="footer-bottom"><span class="footer-copy">&copy; 2025 Pentecost Preparatory School</span></div>
+  </div>
+</footer>
+<div class="fab-wrap"><button class="fab-btn fab-wa" onclick="openWhatsApp()">💬</button><button class="fab-btn fab-call" onclick="callSchool()">📞</button></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/main.js"></script>
+<script>
+let allStaff = [];
+async function loadStaff() {
+  const res = await fetch('/api/staff');
+  allStaff = await res.json();
+  renderStaff(allStaff);
+}
+function renderStaff(list) {
+  const grid = document.getElementById('staff-grid');
+  if (!list.length) { grid.innerHTML = '<p style="color:rgba(253,248,240,0.5); grid-column:1/-1">No staff found.</p>'; return; }
+  grid.innerHTML = list.map(s => `
+    <div class="staff-card reveal">
+      <div class="staff-avatar">${s.name[0]}</div>
+      <div class="staff-name">${s.name}</div>
+      <div class="staff-role">${s.role}</div>
+      <div class="staff-dept">${s.dept}</div>
+      ${s.bio ? `<p style="font-size:0.78rem; color:rgba(253,248,240,0.5); margin-top:0.75rem; line-height:1.6;">${s.bio}</p>` : ''}
+      ${s.email ? `<a href="mailto:${s.email}" style="font-size:0.75rem; color:var(--gold2); margin-top:0.5rem; display:block;">✉️ ${s.email}</a>` : ''}
+    </div>
+  `).join('');
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+}
+function filterStaff() {
+  const q = document.getElementById('staff-search').value.toLowerCase();
+  renderStaff(allStaff.filter(s => s.name.toLowerCase().includes(q) || s.dept.toLowerCase().includes(q) || s.role.toLowerCase().includes(q)));
+}
+loadStaff();
+</script>
+</body>
+</html>

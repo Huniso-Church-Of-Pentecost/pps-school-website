@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact – Pentecost Preparatory School</title>
+  <meta name="theme-color" content="#04112a">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/assets2/PPS BADGE.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<div class="announce-bar"><div class="marquee-track" id="announce-text"><span>Loading...</span></div></div>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="/"><img src="/assets2/PPS BADGE.jpg" alt="PPS">Pentecost Preparatory School</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/">Home</a></li><li><a href="/admissions">Admissions</a></li>
+      <li><a href="/news">News</a></li><li><a href="/staff">Staff</a></li>
+      <li><a href="/gallery">Gallery</a></li><li><a href="/tours">Tours</a></li>
+      <li><a href="/contact" class="active">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container page-hero-content">
+    <div class="breadcrumb"><a href="/">Home</a><span>/</span><span>Contact</span></div>
+    <h1>Get in <span style="color:var(--gold)">Touch</span></h1>
+    <p>We'd love to hear from you. Reach out anytime.</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="grid-2" style="align-items:start; gap:3rem;">
+      <!-- Contact Info -->
+      <div>
+        <div class="card reveal" style="margin-bottom:1.5rem;">
+          <h3 style="color:var(--gold2); margin-bottom:1.25rem;">🏫 Admin Office</h3>
+          <div style="display:flex; flex-direction:column; gap:1rem;">
+            <div style="display:flex; gap:1rem; align-items:flex-start;">
+              <div style="min-width:40px; height:40px; background:var(--glass); border:1px solid var(--border); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">📍</div>
+              <div><div style="color:var(--cream); font-weight:600; font-size:0.9rem;">Address</div><div style="color:rgba(253,248,240,0.6); font-size:0.88rem; margin-top:0.2rem;">TnA Stadium, Western Region, Ghana</div></div>
+            </div>
+            <div style="display:flex; gap:1rem; align-items:flex-start;">
+              <a href="tel:+233554797913" style="min-width:40px; height:40px; background:var(--glass); border:1px solid var(--border); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; text-decoration:none;">📞</a>
+              <div><div style="color:var(--cream); font-weight:600; font-size:0.9rem;">Phone</div><a href="tel:+233554797913" style="color:var(--gold2); font-size:0.88rem; margin-top:0.2rem; display:block;">+233 55 479 7913</a></div>
+            </div>
+            <div style="display:flex; gap:1rem; align-items:flex-start;">
+              <a href="mailto:info@pps.edu.gh" style="min-width:40px; height:40px; background:var(--glass); border:1px solid var(--border); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; text-decoration:none;">✉️</a>
+              <div><div style="color:var(--cream); font-weight:600; font-size:0.9rem;">Email</div><a href="mailto:info@pps.edu.gh" style="color:var(--gold2); font-size:0.88rem; margin-top:0.2rem; display:block;">info@pps.edu.gh</a></div>
+            </div>
+            <div style="display:flex; gap:1rem; align-items:flex-start;">
+              <div style="min-width:40px; height:40px; background:var(--glass); border:1px solid var(--border); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">🕒</div>
+              <div><div style="color:var(--cream); font-weight:600; font-size:0.9rem;">Office Hours</div><div style="color:rgba(253,248,240,0.6); font-size:0.88rem; margin-top:0.2rem;">Monday – Friday: 7:00 AM – 3:30 PM</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card reveal delay-1">
+          <h3 style="color:var(--gold2); margin-bottom:1rem;">📍 Find Us</h3>
+          <div style="background:var(--navy2); border-radius:var(--radius-sm); height:200px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border); flex-direction:column; gap:0.5rem;">
+            <div style="font-size:3rem;">🗺️</div>
+            <div style="color:rgba(253,248,240,0.5); font-size:0.85rem;">TnA Stadium, Western Region, Ghana</div>
+            <a href="https://maps.google.com/?q=Pentecost+Preparatory+School+Ghana" target="_blank" class="btn btn-ghost btn-sm" style="margin-top:0.5rem;">Open in Google Maps →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message Form -->
+      <div class="card reveal delay-2">
+        <h3 style="color:var(--gold2); margin-bottom:0.5rem;">💬 Send a Message</h3>
+        <p style="color:rgba(253,248,240,0.5); font-size:0.88rem; margin-bottom:1.5rem;">We respond within 24 business hours.</p>
+        <form onsubmit="submitContact(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Your Name *</label>
+              <input name="name" required placeholder="Full name">
+            </div>
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" name="email" required placeholder="you@example.com">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" name="phone" placeholder="+233...">
+          </div>
+          <div class="form-group">
+            <label>Subject *</label>
+            <select name="subject" required>
+              <option value="">Select subject</option>
+              <option>Admissions Enquiry</option>
+              <option>Academic Question</option>
+              <option>PTA / Parent Meeting</option>
+              <option>School Fees</option>
+              <option>Scholarship</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message *</label>
+            <textarea name="message" rows="5" required placeholder="Your message here..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Send Message →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom"><span class="footer-copy">&copy; 2025 Pentecost Preparatory School</span></div>
+  </div>
+</footer>
+<div class="fab-wrap"><button class="fab-btn fab-wa" onclick="openWhatsApp()">💬</button><button class="fab-btn fab-call" onclick="callSchool()">📞</button></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>

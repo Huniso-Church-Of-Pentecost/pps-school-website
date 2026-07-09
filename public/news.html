@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>News &amp; Events – Pentecost Preparatory School</title>
+  <meta name="theme-color" content="#04112a">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/assets2/PPS BADGE.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<div class="announce-bar"><div class="marquee-track" id="announce-text"><span>Loading announcements...</span></div></div>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="/"><img src="/assets2/PPS BADGE.jpg" alt="PPS">Pentecost Preparatory School</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/">Home</a></li><li><a href="/admissions">Admissions</a></li>
+      <li><a href="/news" class="active">News &amp; Events</a></li><li><a href="/staff">Staff</a></li>
+      <li><a href="/badges">Badges</a></li><li><a href="/gallery">Gallery</a></li>
+      <li><a href="/tours">Tours</a></li><li><a href="/contact">Contact</a></li>
+      <li><a href="/admissions" class="nav-cta">Apply Now →</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container page-hero-content">
+    <div class="breadcrumb"><a href="/">Home</a><span>/</span><span>News &amp; Events</span></div>
+    <h1>News &amp; <span style="color:var(--gold)">Events</span></h1>
+    <p>Stay up to date with the latest from Pentecost Preparatory School</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <!-- Filter Tabs -->
+    <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:2.5rem;" class="reveal">
+      <button class="btn btn-primary btn-sm filter-btn active" data-cat="all">All</button>
+      <button class="btn btn-ghost btn-sm filter-btn" data-cat="news">📰 News</button>
+      <button class="btn btn-ghost btn-sm filter-btn" data-cat="announcement">📢 Announcements</button>
+      <button class="btn btn-ghost btn-sm filter-btn" data-cat="event">📅 Events</button>
+    </div>
+
+    <div class="grid-3" id="posts-grid">
+      <div class="spinner"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Upcoming Events -->
+<section class="section" style="background: rgba(7,26,62,0.4);">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">Calendar</div>
+      <h2 class="section-title">Upcoming <span class="gold">Events</span></h2>
+      <div class="gold-line" style="margin: 0.75rem auto;"></div>
+    </div>
+    <div id="events-list" style="max-width:700px; margin: 0 auto; display:flex; flex-direction:column; gap:1rem;">
+      <div class="spinner"></div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><img src="/assets2/PPS BADGE.jpg" alt="PPS"><span class="footer-brand-name">Pentecost Preparatory School</span></div>
+        <p class="footer-desc">God Our Victory. TnA Stadium, Western Region, Ghana.</p>
+      </div>
+      <div class="footer-col"><h4>Quick Links</h4><div class="footer-links"><a href="/">Home</a><a href="/admissions">Admissions</a><a href="/news">News</a><a href="/contact">Contact</a></div></div>
+      <div class="footer-col"><h4>Contact</h4><div class="footer-links"><a href="tel:+233554797913">📞 +233 55 479 7913</a><a href="mailto:info@pps.edu.gh">✉️ info@pps.edu.gh</a></div></div>
+    </div>
+    <div class="footer-bottom"><span class="footer-copy">&copy; 2025 Pentecost Preparatory School</span></div>
+  </div>
+</footer>
+<div class="fab-wrap">
+  <button class="fab-btn fab-wa" onclick="openWhatsApp()">💬</button>
+  <button class="fab-btn fab-call" onclick="callSchool()">📞</button>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/main.js"></script>
+<script>
+let allPosts = [];
+let currentCat = 'all';
+
+async function loadPosts() {
+  const res = await fetch('/api/posts');
+  allPosts = await res.json();
+  renderPosts();
+}
+
+function renderPosts() {
+  const filtered = currentCat === 'all' ? allPosts : allPosts.filter(p => p.category === currentCat);
+  const grid = document.getElementById('posts-grid');
+  if (!filtered.length) { grid.innerHTML = '<p style="color:rgba(253,248,240,0.5); grid-column:1/-1">No posts in this category.</p>'; return; }
+  grid.innerHTML = filtered.map(p => `
+    <a href="/news/${p.id}" style="text-decoration:none;">
+      <div class="post-card reveal">
+        <div class="post-card-img">${p.image ? `<img src="${p.image}" alt="${p.title}" loading="lazy">` : '📰'}</div>
+        <div class="post-card-body">
+          <span class="post-category cat-${p.category}">${p.category}</span>
+          <div class="post-card-title">${p.title}</div>
+          <div class="post-card-excerpt">${p.content}</div>
+          <div class="post-card-footer">
+            <span class="post-date">${formatDate(p.date)}</span>
+            <span class="post-views">👁 ${p.views}</span>
+          </div>
+        </div>
+      </div>
+    </a>
+  `).join('');
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => { b.classList.remove('active', 'btn-primary'); b.classList.add('btn-ghost'); });
+    btn.classList.add('active', 'btn-primary'); btn.classList.remove('btn-ghost');
+    currentCat = btn.dataset.cat;
+    renderPosts();
+  });
+});
+
+async function loadEvents() {
+  const res = await fetch('/api/events');
+  const events = await res.json();
+  const list = document.getElementById('events-list');
+  if (!events.length) { list.innerHTML = '<p style="color:rgba(253,248,240,0.5)">No upcoming events.</p>'; return; }
+  list.innerHTML = events.map(e => {
+    const d = new Date(e.date);
+    return `<div class="event-item reveal">
+      <div class="event-date-box"><div class="day">${d.getDate()}</div><div class="mon">${d.toLocaleString('en',{month:'short'})}</div></div>
+      <div class="event-info"><h4>${e.title}</h4><p>${e.description}</p>
+        <div class="event-meta"><span>🕒 ${e.time}</span><span>📍 ${e.location}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+}
+
+loadPosts();
+loadEvents();
+</script>
+</body>
+</html>

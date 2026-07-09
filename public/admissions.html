@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admissions – Pentecost Preparatory School</title>
+  <meta name="theme-color" content="#04112a">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/assets2/PPS BADGE.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<div class="announce-bar"><div class="marquee-track" id="announce-text"><span>Loading...</span></div></div>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="/"><img src="/assets2/PPS BADGE.jpg" alt="PPS">Pentecost Preparatory School</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/">Home</a></li><li><a href="/admissions" class="active">Admissions</a></li>
+      <li><a href="/news">News &amp; Events</a></li><li><a href="/staff">Staff</a></li>
+      <li><a href="/badges">Badges</a></li><li><a href="/gallery">Gallery</a></li>
+      <li><a href="/tours">Tours</a></li><li><a href="/contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container page-hero-content">
+    <div class="breadcrumb"><a href="/">Home</a><span>/</span><span>Admissions</span></div>
+    <h1><span style="color:var(--gold)">Admissions</span> 2025/2026</h1>
+    <p>Start your child's journey of academic excellence today</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="grid-2" style="align-items:start; gap:3rem;">
+      <!-- Form -->
+      <div class="reveal">
+        <div class="card card-gold">
+          <h2 style="color:var(--gold); margin-bottom:0.5rem; font-size:1.6rem;">📝 Online Application</h2>
+          <p style="color:rgba(253,248,240,0.6); font-size:0.9rem; margin-bottom:2rem;">Fill out the form below to apply for admission. We will contact you within 48 hours.</p>
+          <div id="admission-alert"></div>
+          <form onsubmit="submitAdmission(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Applicant Full Name *</label>
+                <input name="name" required placeholder="e.g. Kwame Asante">
+              </div>
+              <div class="form-group">
+                <label>Date of Birth *</label>
+                <input type="date" name="dob" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Class Applying For *</label>
+              <select name="class" required>
+                <option value="">Select class</option>
+                <option>Nursery 1</option><option>Nursery 2</option>
+                <option>KG 1</option><option>KG 2</option>
+                <option>Primary 1</option><option>Primary 2</option><option>Primary 3</option>
+                <option>Primary 4</option><option>Primary 5</option><option>Primary 6</option>
+                <option>JHS 1</option><option>JHS 2</option><option>JHS 3</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Guardian/Parent Name *</label>
+                <input name="guardian" required placeholder="Parent or Guardian">
+              </div>
+              <div class="form-group">
+                <label>Guardian Phone *</label>
+                <input type="tel" name="phone" required placeholder="+233...">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Guardian Email</label>
+              <input type="email" name="email" placeholder="email@example.com">
+            </div>
+            <div class="form-group">
+              <label>Residential Address *</label>
+              <input name="address" required placeholder="Your home address">
+            </div>
+            <div class="form-group">
+              <label>Previous School (if any)</label>
+              <input name="prev_school" placeholder="Previous school name">
+            </div>
+            <div class="form-group">
+              <label>Additional Notes</label>
+              <textarea name="notes" rows="3" placeholder="Any special needs, notes or questions..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Submit Application →</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div>
+        <div class="card reveal" style="margin-bottom:1.5rem;">
+          <h3 style="color:var(--gold2); margin-bottom:1rem;">📋 Admission Requirements</h3>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:0.75rem;">
+            <li style="color:rgba(253,248,240,0.75); font-size:0.9rem; padding-left:1.5rem; position:relative;"><span style="position:absolute; left:0; color:var(--gold)">✓</span> Birth Certificate (Original &amp; Copy)</li>
+            <li style="color:rgba(253,248,240,0.75); font-size:0.9rem; padding-left:1.5rem; position:relative;"><span style="position:absolute; left:0; color:var(--gold)">✓</span> Last Report Card / Academic Record</li>
+            <li style="color:rgba(253,248,240,0.75); font-size:0.9rem; padding-left:1.5rem; position:relative;"><span style="position:absolute; left:0; color:var(--gold)">✓</span> Passport Photograph (2 copies)</li>
+            <li style="color:rgba(253,248,240,0.75); font-size:0.9rem; padding-left:1.5rem; position:relative;"><span style="position:absolute; left:0; color:var(--gold)">✓</span> Parent/Guardian ID Card</li>
+            <li style="color:rgba(253,248,240,0.75); font-size:0.9rem; padding-left:1.5rem; position:relative;"><span style="position:absolute; left:0; color:var(--gold)">✓</span> Completed Admission Form</li>
+            <li style="color:rgba(253,248,240,0.75); font-size:0.9rem; padding-left:1.5rem; position:relative;"><span style="position:absolute; left:0; color:var(--gold)">✓</span> Entrance Assessment (for JHS)</li>
+          </ul>
+        </div>
+
+        <div class="card reveal delay-1" style="margin-bottom:1.5rem;">
+          <h3 style="color:var(--gold2); margin-bottom:1rem;">💰 Scholarships Available</h3>
+          <p style="color:rgba(253,248,240,0.65); font-size:0.9rem; line-height:1.7;">We offer partial and full scholarships for academically exceptional students. Contact the headmaster's office for details on eligibility and application procedures.</p>
+        </div>
+
+        <div class="card reveal delay-2">
+          <h3 style="color:var(--gold2); margin-bottom:1rem;">📞 Contact Admissions</h3>
+          <div style="display:flex; flex-direction:column; gap:0.75rem;">
+            <a href="tel:+233554797913" style="display:flex; align-items:center; gap:0.75rem; color:rgba(253,248,240,0.75); font-size:0.9rem;">
+              <div style="width:36px; height:36px; background:var(--glass); border:1px solid var(--border); border-radius:8px; display:flex; align-items:center; justify-content:center;">📞</div>
+              +233 55 479 7913
+            </a>
+            <a href="mailto:info@pps.edu.gh" style="display:flex; align-items:center; gap:0.75rem; color:rgba(253,248,240,0.75); font-size:0.9rem;">
+              <div style="width:36px; height:36px; background:var(--glass); border:1px solid var(--border); border-radius:8px; display:flex; align-items:center; justify-content:center;">✉️</div>
+              info@pps.edu.gh
+            </a>
+            <div style="display:flex; align-items:center; gap:0.75rem; color:rgba(253,248,240,0.75); font-size:0.9rem;">
+              <div style="width:36px; height:36px; background:var(--glass); border:1px solid var(--border); border-radius:8px; display:flex; align-items:center; justify-content:center;">🕒</div>
+              Mon–Fri: 7:30 AM – 3:00 PM
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom"><span class="footer-copy">&copy; 2025 Pentecost Preparatory School</span></div>
+  </div>
+</footer>
+<div class="fab-wrap"><button class="fab-btn fab-wa" onclick="openWhatsApp()">💬</button><button class="fab-btn fab-call" onclick="callSchool()">📞</button></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>

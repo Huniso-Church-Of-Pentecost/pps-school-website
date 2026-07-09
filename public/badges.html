@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>House Badges – Pentecost Preparatory School</title>
+  <meta name="theme-color" content="#04112a">
+  <link rel="manifest" href="/manifest.json"><link rel="icon" href="/assets2/PPS BADGE.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<div class="announce-bar"><div class="marquee-track" id="announce-text"><span>Loading...</span></div></div>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="/"><img src="/assets2/PPS BADGE.jpg" alt="PPS">Pentecost Preparatory School</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/">Home</a></li><li><a href="/admissions">Admissions</a></li>
+      <li><a href="/news">News</a></li><li><a href="/staff">Staff</a></li>
+      <li><a href="/badges" class="active">Badges</a></li><li><a href="/gallery">Gallery</a></li>
+      <li><a href="/tours">Tours</a></li><li><a href="/contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="page-hero">
+  <div class="container page-hero-content">
+    <div class="breadcrumb"><a href="/">Home</a><span>/</span><span>House Badges</span></div>
+    <h1>House <span style="color:var(--gold)">Badges</span></h1>
+    <p>Our four school houses — united in excellence and faith</p>
+  </div>
+</div>
+<section class="section">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-tag">School Houses</div>
+      <h2 class="section-title">The Four <span class="gold">Houses</span></h2>
+      <div class="gold-line" style="margin:0.75rem auto;"></div>
+      <p class="section-desc">Each house represents excellence, pride, and the competitive spirit of our students.</p>
+    </div>
+    <div class="grid-4">
+      <div class="badge-card reveal"><img src="/assets2/badge1.jpg" alt="House 1" onerror="this.style.display='none'"><div style="font-size:3rem; margin-bottom:0.75rem;">🦁</div><h3>House 1</h3><p>Strength, courage, and academic excellence. Red is the colour of champions.</p></div>
+      <div class="badge-card reveal delay-1"><img src="/assets2/badge2.jpg" alt="House 2" onerror="this.style.display='none'"><div style="font-size:3rem; margin-bottom:0.75rem;">🦅</div><h3>House 2</h3><p>Soaring above challenges through determination and team spirit.</p></div>
+      <div class="badge-card reveal delay-2"><img src="/assets2/badge3.jpg" alt="House 3" onerror="this.style.display='none'"><div style="font-size:3rem; margin-bottom:0.75rem;">🌊</div><h3>House 3</h3><p>Flowing with grace, resilience, and community spirit.</p></div>
+      <div class="badge-card reveal delay-3"><img src="/assets2/badge4.jpg" alt="House 4" onerror="this.style.display='none'"><div style="font-size:3rem; margin-bottom:0.75rem;">⭐</div><h3>House 4</h3><p>Shining bright in sports, arts, academics, and service.</p></div>
+    </div>
+    <div class="card reveal" style="margin-top:3rem; text-align:center;">
+      <img src="/assets2/PPS BADGE.jpg" alt="School Badge" style="width:160px; height:160px; object-fit:contain; margin:0 auto 1.5rem; border-radius:50%; border:4px solid var(--gold);">
+      <h2 style="color:var(--gold2);">The School Badge</h2>
+      <p style="color:rgba(253,248,240,0.65); max-width:500px; margin:1rem auto; font-size:0.95rem;">Our badge represents God Our Victory — the foundation of everything we do at Pentecost Preparatory School. It is a symbol of academic excellence, Christian values, and service to community.</p>
+    </div>
+  </div>
+</section>
+<footer class="footer"><div class="container"><div class="footer-bottom"><span class="footer-copy">&copy; 2025 Pentecost Preparatory School</span></div></div></footer>
+<div class="fab-wrap"><button class="fab-btn fab-wa" onclick="openWhatsApp()">💬</button><button class="fab-btn fab-call" onclick="callSchool()">📞</button></div>
+<script src="/socket.io/socket.io.js"></script><script src="/js/main.js"></script>
+</body>
+</html>

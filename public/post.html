@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post – Pentecost Preparatory School</title>
+  <meta name="theme-color" content="#04112a">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/assets2/PPS BADGE.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<div class="announce-bar"><div class="marquee-track" id="announce-text"><span>Loading...</span></div></div>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="/"><img src="/assets2/PPS BADGE.jpg" alt="PPS">Pentecost Preparatory School</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/">Home</a></li><li><a href="/admissions">Admissions</a></li>
+      <li><a href="/news">News &amp; Events</a></li><li><a href="/staff">Staff</a></li>
+      <li><a href="/badges">Badges</a></li><li><a href="/gallery">Gallery</a></li>
+      <li><a href="/tours">Tours</a></li><li><a href="/contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<section style="padding: 8rem 0 4rem; min-height: 60vh;">
+  <div class="container" style="max-width: 800px;" id="post-content">
+    <div class="spinner"></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom"><span class="footer-copy">&copy; 2025 Pentecost Preparatory School</span><a href="/news" style="color:var(--gold); font-size:0.82rem;">← Back to News</a></div>
+  </div>
+</footer>
+
+<div class="fab-wrap">
+  <button class="fab-btn fab-wa" onclick="openWhatsApp()">💬</button>
+  <button class="fab-btn fab-call" onclick="callSchool()">📞</button>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/main.js"></script>
+<script>
+async function loadPost() {
+  const id = window.location.pathname.split('/').pop();
+  try {
+    const res = await fetch('/api/posts/' + id);
+    if (!res.ok) throw new Error();
+    const post = await res.json();
+    document.title = post.title + ' – PPS';
+    document.getElementById('post-content').innerHTML = `
+      <div class="breadcrumb reveal"><a href="/">Home</a><span>/</span><a href="/news">News</a><span>/</span><span>${post.title}</span></div>
+      <span class="post-category cat-${post.category}" style="margin-bottom:1rem; display:inline-block;">${post.category}</span>
+      <h1 style="color:var(--cream); margin-bottom:1rem;" class="reveal">${post.title}</h1>
+      <div style="display:flex; gap:1rem; align-items:center; margin-bottom:2rem; color:rgba(253,248,240,0.5); font-size:0.85rem;" class="reveal">
+        <span>📅 ${formatDate(post.date)}</span>
+        <span>✍️ ${post.author || 'Admin'}</span>
+        <span>👁 ${post.views} views</span>
+      </div>
+      ${post.image ? `<img src="${post.image}" alt="${post.title}" style="width:100%; border-radius:var(--radius); margin-bottom:2rem; border:1px solid var(--border);" class="reveal">` : ''}
+      <div style="font-size:1.05rem; line-height:1.9; color:rgba(253,248,240,0.8);" class="reveal">
+        ${post.content.split('\n').map(p => `<p style="margin-bottom:1.25rem;">${p}</p>`).join('')}
+      </div>
+      <div style="margin-top:2.5rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; gap:1rem; flex-wrap:wrap;" class="reveal">
+        <a href="/news" class="btn btn-outline btn-sm">← Back to News</a>
+        <a href="/" class="btn btn-ghost btn-sm">🏠 Home</a>
+      </div>
+    `;
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  } catch(e) {
+    document.getElementById('post-content').innerHTML = '<div style="text-align:center; padding:4rem;"><h2 style="color:var(--gold)">Post not found</h2><a href="/news" class="btn btn-outline" style="margin-top:1rem">← Back to News</a></div>';
+  }
+}
+loadPost();
+</script>
+</body>
+</html>

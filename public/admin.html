@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel – PPS</title>
+  <link rel="icon" href="/assets2/PPS BADGE.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen" class="login-page">
+  <div class="login-card">
+    <img class="login-logo" src="/assets2/PPS BADGE.jpg" alt="PPS">
+    <h2 class="login-title">Admin Panel</h2>
+    <p class="login-sub">Pentecost Preparatory School</p>
+    <div class="form-group">
+      <label>Username</label>
+      <input type="text" id="login-user" placeholder="Enter username" value="admin">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="Enter password" value="pps2025" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="btn-login" onclick="doLogin()">Sign In →</button>
+    <div class="login-error" id="login-err"></div>
+    <div style="margin-top:1.5rem; font-size:0.75rem; color:var(--muted);">Default: admin / pps2025</div>
+    <a href="/" style="display:block; margin-top:0.75rem; font-size:0.78rem; color:var(--muted);">← Back to Website</a>
+  </div>
+</div>
+
+<!-- ADMIN LAYOUT -->
+<div id="admin-app" class="admin-layout" style="display:none;">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img class="sidebar-logo" src="/assets2/PPS BADGE.jpg" alt="PPS">
+      <div>
+        <div class="sidebar-name">PPS Admin</div>
+        <div class="sidebar-tag">Control Panel</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-label">Overview</div>
+        <button class="nav-item active" data-panel="dashboard"><span class="icon">📊</span> Dashboard</button>
+        <button class="nav-item" data-panel="realtime"><span class="icon">🔴</span> Live Activity</button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Content</div>
+        <button class="nav-item" data-panel="posts"><span class="icon">📰</span> Blog & News</button>
+        <button class="nav-item" data-panel="events"><span class="icon">📅</span> Events</button>
+        <button class="nav-item" data-panel="gallery-mgr"><span class="icon">🖼️</span> Gallery</button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">School</div>
+        <button class="nav-item" data-panel="admissions"><span class="icon">📝</span> Admissions <span class="nav-badge" id="admit-badge">0</span></button>
+        <button class="nav-item" data-panel="messages"><span class="icon">💬</span> Messages <span class="nav-badge" id="msg-badge">0</span></button>
+        <button class="nav-item" data-panel="staff-mgr"><span class="icon">👨‍🏫</span> Staff</button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-label">Settings</div>
+        <button class="nav-item" data-panel="announcements"><span class="icon">📢</span> Announcements</button>
+        <button class="nav-item" data-panel="settings"><span class="icon">⚙️</span> Site Settings</button>
+        <button class="nav-item" data-panel="stats-mgr"><span class="icon">📈</span> Stats</button>
+        <button class="nav-item" data-panel="security"><span class="icon">🔑</span> Security</button>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar" id="sidebar-avatar">A</div>
+        <div><div class="sidebar-uname" id="sidebar-uname">Admin</div><div class="sidebar-role">Administrator</div></div>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">🚪 Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <div class="topbar">
+      <div style="display:flex; align-items:center; gap:0.75rem;">
+        <button onclick="toggleSidebar()" style="background:none;border:none;color:var(--text);font-size:1.2rem;cursor:pointer;padding:0.25rem;">☰</button>
+        <div class="topbar-title" id="panel-title">Dashboard</div>
+      </div>
+      <div class="topbar-right">
+        <div class="online-badge"><div class="dot-pulse"></div><span id="online-num">0 online</span></div>
+        <a href="/" target="_blank" class="topbar-btn">🌐 View Site</a>
+      </div>
+    </div>
+
+    <div class="content-area">
+
+      <!-- DASHBOARD -->
+      <div class="panel active" id="panel-dashboard">
+        <div class="stats-grid" id="dash-stats">
+          <div class="stat-card gold"><div class="stat-icon">📰</div><div class="stat-value" id="s-posts">0</div><div class="stat-label">Blog Posts</div></div>
+          <div class="stat-card blue"><div class="stat-icon">📝</div><div class="stat-value" id="s-admissions">0</div><div class="stat-label">Applications</div></div>
+          <div class="stat-card red"><div class="stat-icon">💬</div><div class="stat-value" id="s-messages">0</div><div class="stat-label">Unread Messages</div></div>
+          <div class="stat-card green"><div class="stat-icon">📅</div><div class="stat-value" id="s-events">0</div><div class="stat-label">Events</div></div>
+          <div class="stat-card purple"><div class="stat-icon">👨‍🏫</div><div class="stat-value" id="s-staff">0</div><div class="stat-label">Staff Members</div></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:1.5rem;">
+          <div class="table-wrap">
+            <div class="table-header"><div class="table-title">📝 Recent Applications</div></div>
+            <table><thead><tr><th>Name</th><th>Class</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody id="dash-admissions"><tr><td colspan="4" style="text-align:center; color:var(--muted); padding:2rem;">Loading...</td></tr></tbody></table>
+          </div>
+          <div class="table-wrap">
+            <div class="table-header"><div class="table-title">💬 Recent Messages</div></div>
+            <table><thead><tr><th>From</th><th>Subject</th><th>Date</th></tr></thead>
+            <tbody id="dash-messages"><tr><td colspan="3" style="text-align:center; color:var(--muted); padding:2rem;">Loading...</td></tr></tbody></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIVE ACTIVITY -->
+      <div class="panel" id="panel-realtime">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+          <div class="table-wrap" style="height:fit-content;">
+            <div class="table-header"><div class="table-title">🔴 Live Stats</div></div>
+            <div style="padding:1.25rem; display:flex; flex-direction:column; gap:1rem;">
+              <div style="display:flex; justify-content:space-between; align-items:center; background:var(--glass); border-radius:var(--radius-sm); padding:1rem;">
+                <div style="color:var(--text); font-size:0.88rem;">👥 Users Online</div>
+                <div style="font-size:1.5rem; font-weight:800; color:var(--success);" id="rt-online">0</div>
+              </div>
+              <div id="rt-feed" style="display:flex; flex-direction:column; gap:0.5rem; max-height:300px; overflow-y:auto;"></div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <div class="table-header"><div class="table-title">💬 Admin Chat</div><div style="font-size:0.75rem; color:var(--muted);">Real-time</div></div>
+            <div class="chat-container" style="border:none; border-radius:0;">
+              <div class="chat-messages" id="chat-messages"></div>
+              <div class="chat-input-row">
+                <input type="text" id="chat-input" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChat()">
+                <button class="btn btn-primary btn-sm" onclick="sendChat()">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POSTS -->
+      <div class="panel" id="panel-posts">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+          <h2 style="font-size:1.1rem;">Blog &amp; News Posts</h2>
+          <button class="btn btn-primary" onclick="openPostModal()">+ New Post</button>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Title</th><th>Category</th><th>Date</th><th>Views</th><th>Featured</th><th>Actions</th></tr></thead>
+          <tbody id="posts-table"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted);">Loading...</td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- EVENTS -->
+      <div class="panel" id="panel-events">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+          <h2 style="font-size:1.1rem;">Events Calendar</h2>
+          <button class="btn btn-primary" onclick="openEventModal()">+ New Event</button>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Title</th><th>Date</th><th>Time</th><th>Location</th><th>Actions</th></tr></thead>
+          <tbody id="events-table"><tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--muted);">Loading...</td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- GALLERY MANAGER -->
+      <div class="panel" id="panel-gallery-mgr">
+        <h2 style="font-size:1.1rem; margin-bottom:1.5rem;">Gallery Images</h2>
+        <div style="background:var(--bg2); border:2px dashed var(--border); border-radius:var(--radius); padding:2.5rem; text-align:center; margin-bottom:1.5rem;">
+          <div style="font-size:2.5rem; margin-bottom:0.75rem;">📤</div>
+          <div style="color:var(--text); font-size:0.9rem; margin-bottom:0.5rem;">Upload photos to the gallery</div>
+          <div style="color:var(--muted); font-size:0.78rem; margin-bottom:1rem;">JPG, PNG, WEBP — max 5MB each</div>
+          <label class="btn btn-primary" style="cursor:pointer; display:inline-flex;">
+            Choose Photos <input type="file" multiple accept="image/*" onchange="uploadGalleryImages(this)" style="display:none;">
+          </label>
+        </div>
+        <div class="table-wrap">
+          <div class="table-header"><div class="table-title">Uploaded Images</div></div>
+          <div id="gallery-img-grid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:0.75rem; padding:1rem;">
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMISSIONS -->
+      <div class="panel" id="panel-admissions">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:0.75rem;">
+          <h2 style="font-size:1.1rem;">Admission Applications</h2>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button class="btn btn-secondary btn-sm filter-admit active" data-status="all">All</button>
+            <button class="btn btn-secondary btn-sm filter-admit" data-status="pending">Pending</button>
+            <button class="btn btn-secondary btn-sm filter-admit" data-status="approved">Approved</button>
+            <button class="btn btn-secondary btn-sm filter-admit" data-status="rejected">Rejected</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Name</th><th>Class</th><th>Guardian</th><th>Phone</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="admissions-table"><tr><td colspan="7" style="text-align:center;padding:2rem;color:var(--muted);">Loading...</td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- MESSAGES -->
+      <div class="panel" id="panel-messages">
+        <h2 style="font-size:1.1rem; margin-bottom:1.5rem;">Contact Messages</h2>
+        <div class="table-wrap">
+          <table><thead><tr><th>From</th><th>Email</th><th>Subject</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="messages-table"><tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted);">Loading...</td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- STAFF MANAGER -->
+      <div class="panel" id="panel-staff-mgr">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+          <h2 style="font-size:1.1rem;">Staff Management</h2>
+          <button class="btn btn-primary" onclick="openStaffModal()">+ Add Staff</button>
+        </div>
+        <div class="table-wrap">
+          <table><thead><tr><th>Name</th><th>Role</th><th>Department</th><th>Email</th><th>Actions</th></tr></thead>
+          <tbody id="staff-table"><tr><td colspan="5" style="text-align:center;padding:2rem;color:var(--muted);">Loading...</td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- ANNOUNCEMENTS -->
+      <div class="panel" id="panel-announcements">
+        <h2 style="font-size:1.1rem; margin-bottom:1.5rem;">Manage Announcements</h2>
+        <div class="table-wrap" style="padding:1.5rem;">
+          <div id="ann-list" style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1.25rem;"></div>
+          <div style="display:flex; gap:0.75rem;">
+            <input type="text" id="new-ann" placeholder="New announcement text..." style="flex:1; background:var(--glass2); border:1px solid var(--border2); border-radius:var(--radius-sm); color:var(--cream); font-family:Outfit,sans-serif; font-size:0.88rem; padding:0.65rem 0.9rem; outline:none;">
+            <button class="btn btn-primary" onclick="addAnnouncement()">Add</button>
+          </div>
+          <button class="btn btn-success" onclick="saveAnnouncements()" style="margin-top:1rem; width:100%; justify-content:center;">💾 Save &amp; Publish</button>
+        </div>
+      </div>
+
+      <!-- SITE SETTINGS -->
+      <div class="panel" id="panel-settings">
+        <h2 style="font-size:1.1rem; margin-bottom:1.5rem;">Site Settings</h2>
+        <div class="table-wrap" style="padding:1.5rem;">
+          <div id="settings-alert"></div>
+          <form onsubmit="saveSettings(event)">
+            <div class="form-grid">
+              <div class="form-group"><label>School Name</label><input id="set-name" required></div>
+              <div class="form-group"><label>Tagline / Motto</label><input id="set-tagline"></div>
+              <div class="form-group"><label>Phone Number</label><input id="set-phone"></div>
+              <div class="form-group"><label>WhatsApp Number</label><input id="set-wa" placeholder="e.g. 233554797913"></div>
+              <div class="form-group"><label>Email Address</label><input id="set-email" type="email"></div>
+              <div class="form-group"><label>Address</label><input id="set-address"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">💾 Save Settings</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- STATS MANAGER -->
+      <div class="panel" id="panel-stats-mgr">
+        <h2 style="font-size:1.1rem; margin-bottom:1.5rem;">Homepage Statistics</h2>
+        <div class="table-wrap" style="padding:1.5rem;">
+          <div id="stats-alert"></div>
+          <form onsubmit="saveStats(event)">
+            <div class="form-grid">
+              <div class="form-group"><label>Total Students</label><input id="st-students" type="number"></div>
+              <div class="form-group"><label>BECE Pass Rate (%)</label><input id="st-bece" type="number"></div>
+              <div class="form-group"><label>Number of Teachers</label><input id="st-teachers" type="number"></div>
+              <div class="form-group"><label>Number of Houses</label><input id="st-houses" type="number"></div>
+              <div class="form-group"><label>Years of Excellence</label><input id="st-years" type="number"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">💾 Save Statistics</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- SECURITY -->
+      <div class="panel" id="panel-security">
+        <h2 style="font-size:1.1rem; margin-bottom:1.5rem;">🔑 Security Settings</h2>
+        <div class="table-wrap" style="padding:1.5rem; max-width:480px;">
+          <h3 style="font-size:0.95rem; color:var(--cream); margin-bottom:1.25rem;">Change Password</h3>
+          <div id="pwd-alert"></div>
+          <div class="form-group"><label>Current Password</label><input type="password" id="pwd-current" placeholder="Enter current password"></div>
+          <div class="form-group"><label>New Password</label><input type="password" id="pwd-new" placeholder="New password (min 6 chars)"></div>
+          <div class="form-group"><label>Confirm New Password</label><input type="password" id="pwd-confirm" placeholder="Repeat new password"></div>
+          <button class="btn btn-primary" onclick="changePassword()">🔑 Update Password</button>
+        </div>
+        <div class="table-wrap" style="padding:1.5rem; max-width:480px; margin-top:1.5rem;">
+          <h3 style="font-size:0.95rem; color:var(--cream); margin-bottom:1rem;">Session Info</h3>
+          <div style="font-size:0.85rem; color:var(--text);">Logged in as: <strong style="color:var(--gold2);" id="sec-username">—</strong></div>
+          <div style="font-size:0.85rem; color:var(--text); margin-top:0.5rem;">Role: <strong style="color:var(--gold2);">Administrator</strong></div>
+          <button class="btn btn-danger" onclick="doLogout()" style="margin-top:1.25rem;">🚪 Sign Out</button>
+        </div>
+      </div>
+
+    </div><!-- /content-area -->
+  </div><!-- /main-content -->
+</div><!-- /admin-layout -->
+
+<!-- TOAST CONTAINER -->
+<div class="toast-wrap" id="toasts"></div>
+
+<!-- POST MODAL -->
+<div class="modal-overlay" id="modal-post">
+  <div class="modal">
+    <div class="modal-head"><h3 id="post-modal-title">New Post</h3><button class="modal-close" onclick="closeModal('modal-post')">✕</button></div>
+    <div id="post-alert"></div>
+    <form onsubmit="savePost(event)" enctype="multipart/form-data">
+      <input type="hidden" id="post-id">
+      <div class="form-group"><label>Title *</label><input id="p-title" required placeholder="Post title"></div>
+      <div class="form-group"><label>Category *</label>
+        <select id="p-cat">
+          <option value="news">📰 News</option>
+          <option value="announcement">📢 Announcement</option>
+          <option value="event">📅 Event</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Content *</label><textarea id="p-content" rows="6" required placeholder="Write your post content here..."></textarea></div>
+      <div class="form-group"><label>Cover Image (optional)</label><input type="file" id="p-image" accept="image/*" style="padding:0.5rem;"></div>
+      <div class="form-check"><input type="checkbox" id="p-featured"><label for="p-featured">Mark as Featured Post</label></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-post')">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Post</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- EVENT MODAL -->
+<div class="modal-overlay" id="modal-event">
+  <div class="modal">
+    <div class="modal-head"><h3 id="event-modal-title">New Event</h3><button class="modal-close" onclick="closeModal('modal-event')">✕</button></div>
+    <div id="event-alert"></div>
+    <input type="hidden" id="ev-id">
+    <div class="form-group"><label>Event Title *</label><input id="ev-title" required></div>
+    <div class="form-grid">
+      <div class="form-group"><label>Date *</label><input id="ev-date" type="date" required></div>
+      <div class="form-group"><label>Time *</label><input id="ev-time" required placeholder="e.g. 10:00 AM"></div>
+    </div>
+    <div class="form-group"><label>Location *</label><input id="ev-location" required placeholder="e.g. School Hall"></div>
+    <div class="form-group"><label>Description</label><textarea id="ev-desc" rows="3"></textarea></div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" onclick="closeModal('modal-event')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEvent()">Save Event</button>
+    </div>
+  </div>
+</div>
+
+<!-- STAFF MODAL -->
+<div class="modal-overlay" id="modal-staff">
+  <div class="modal">
+    <div class="modal-head"><h3 id="staff-modal-title">Add Staff</h3><button class="modal-close" onclick="closeModal('modal-staff')">✕</button></div>
+    <input type="hidden" id="sf-id">
+    <div class="form-grid">
+      <div class="form-group"><label>Full Name *</label><input id="sf-name" required></div>
+      <div class="form-group"><label>Role / Title *</label><input id="sf-role" required></div>
+      <div class="form-group"><label>Department *</label>
+        <select id="sf-dept">
+          <option>Administration</option><option>ICT</option><option>Science</option>
+          <option>Mathematics</option><option>English</option><option>Social Studies</option>
+          <option>Religious &amp; Moral Education</option><option>Primary</option>
+          <option>Sports</option><option>Arts</option><option>Other</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Email</label><input id="sf-email" type="email"></div>
+      <div class="form-group"><label>Phone</label><input id="sf-phone"></div>
+    </div>
+    <div class="form-group"><label>Short Bio</label><textarea id="sf-bio" rows="3" placeholder="A brief description..."></textarea></div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" onclick="closeModal('modal-staff')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveStaff()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- MESSAGE MODAL -->
+<div class="modal-overlay" id="modal-msg">
+  <div class="modal">
+    <div class="modal-head"><h3>Message Detail</h3><button class="modal-close" onclick="closeModal('modal-msg')">✕</button></div>
+    <div id="msg-detail"></div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('modal-msg')">Close</button></div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+// ---- SOCKET ----
+const socket = io();
+socket.on('online-count', n => { document.getElementById('online-num').textContent = n + ' online'; document.getElementById('rt-online').textContent = n; });
+socket.on('new-admission', d => { addFeed('📝 New admission: ' + d.name); loadDash(); loadAdmissions(); updateBadges(); });
+socket.on('new-message', d => { addFeed('💬 New message from ' + d.name); loadDash(); loadMessages(); updateBadges(); });
+socket.on('new-post', () => loadPosts());
+socket.on('chat-message', d => addChatMsg(d));
+
+// ---- UTILS ----
+const api = async (url, opt = {}) => { const r = await fetch(url, opt); return r.json(); };
+const toast = (msg, type='info') => {
+  const c = document.getElementById('toasts');
+  const t = document.createElement('div'); t.className = 'toast';
+  const icons = {success:'✅',error:'❌',info:'ℹ️'}; t.textContent = (icons[type]||'') + ' ' + msg;
+  c.appendChild(t); setTimeout(() => { t.style.opacity='0'; t.style.transform='translateX(100%)'; t.style.transition='0.4s'; setTimeout(()=>t.remove(),400); }, 3500);
+};
+const fmtDate = s => new Date(s).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+const openModal = id => document.getElementById(id).classList.add('active');
+const closeModal = id => document.getElementById(id).classList.remove('active');
+
+// ---- LOGIN ----
+async function doLogin() {
+  const u = document.getElementById('login-user').value;
+  const p = document.getElementById('login-pass').value;
+  const r = await api('/api/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username:u, password:p}) });
+  if (r.success) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-app').style.display = 'flex';
+    document.getElementById('sidebar-uname').textContent = r.user.username;
+    document.getElementById('sidebar-avatar').textContent = r.user.username[0].toUpperCase();
+    chatUsername = r.user.username;
+    const secEl = document.getElementById('sec-username');
+    if (secEl) secEl.textContent = r.user.username;
+    initAdmin();
+  } else {
+    document.getElementById('login-err').textContent = r.message || 'Login failed';
+  }
+}
+
+async function checkSession() {
+  const me = await api('/api/auth/me');
+  if (me) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('admin-app').style.display = 'flex';
+    document.getElementById('sidebar-uname').textContent = me.username;
+    document.getElementById('sidebar-avatar').textContent = me.username[0].toUpperCase();
+    initAdmin();
+  }
+}
+
+async function doLogout() {
+  await api('/api/auth/logout', {method:'POST'});
+  document.getElementById('admin-app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+// ---- SIDEBAR NAV ----
+const panelTitles = {
+  dashboard:'📊 Dashboard', realtime:'🔴 Live Activity', posts:'📰 Blog & News',
+  events:'📅 Events', 'gallery-mgr':'🖼️ Gallery', admissions:'📝 Admissions',
+  messages:'💬 Messages', 'staff-mgr':'👨‍🏫 Staff', announcements:'📢 Announcements',
+  settings:'⚙️ Settings', 'stats-mgr':'📈 Statistics', security:'🔑 Security'
+};
+document.querySelectorAll('.nav-item[data-panel]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const id = btn.dataset.panel;
+    document.getElementById('panel-' + id).classList.add('active');
+    document.getElementById('panel-title').textContent = panelTitles[id] || id;
+    if (window.panelLoaders && window.panelLoaders[id]) window.panelLoaders[id]();
+  });
+});
+
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+
+// ---- INIT ----
+async function initAdmin() {
+  loadDash();
+  loadPosts();
+  loadEvents();
+  loadAdmissions();
+  loadMessages();
+  loadStaff();
+  loadAnnouncements();
+  loadSettings();
+  loadStats();
+  loadGallery();
+  updateBadges();
+}
+
+// ---- DASHBOARD ----
+async function loadDash() {
+  const d = await api('/api/dashboard');
+  document.getElementById('s-posts').textContent = d.posts;
+  document.getElementById('s-admissions').textContent = d.admissions;
+  document.getElementById('s-messages').textContent = d.messages;
+  document.getElementById('s-events').textContent = d.events;
+  document.getElementById('s-staff').textContent = d.staff;
+  document.getElementById('dash-admissions').innerHTML = (d.recent_admissions||[]).map(a => `
+    <tr><td>${a.name}</td><td>${a.class||'-'}</td><td><span class="badge badge-${a.status}">${a.status}</span></td><td>${fmtDate(a.date)}</td></tr>
+  `).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--muted);">None yet</td></tr>';
+  document.getElementById('dash-messages').innerHTML = (d.recent_messages||[]).map(m => `
+    <tr><td>${m.name}</td><td>${m.subject||'-'}</td><td>${fmtDate(m.date)}</td></tr>
+  `).join('') || '<tr><td colspan="3" style="text-align:center;color:var(--muted);">None yet</td></tr>';
+}
+
+async function updateBadges() {
+  const d = await api('/api/dashboard');
+  document.getElementById('admit-badge').textContent = (await api('/api/admissions')).filter(a=>a.status==='pending').length || '';
+  document.getElementById('msg-badge').textContent = d.messages || '';
+}
+
+// ---- LIVE FEED ----
+const feedItems = [];
+function addFeed(msg) {
+  feedItems.unshift({ msg, time: new Date().toLocaleTimeString() });
+  if (feedItems.length > 20) feedItems.pop();
+  document.getElementById('rt-feed').innerHTML = feedItems.map(f => `
+    <div style="background:var(--glass); border-radius:var(--radius-sm); padding:0.6rem 0.85rem; font-size:0.8rem; display:flex; justify-content:space-between; gap:0.5rem;">
+      <span>${f.msg}</span><span style="color:var(--muted); white-space:nowrap;">${f.time}</span>
+    </div>`).join('');
+}
+
+// ---- CHAT ----
+let chatUsername = 'Admin';
+function addChatMsg(d) {
+  const box = document.getElementById('chat-messages');
+  const isMe = d.user === chatUsername;
+  box.innerHTML += `<div class="chat-msg ${isMe?'me':''}"><div class="bubble">${d.msg}</div><div class="meta">${d.user} · ${d.time}</div></div>`;
+  box.scrollTop = box.scrollHeight;
+}
+function sendChat() {
+  const inp = document.getElementById('chat-input');
+  if (!inp.value.trim()) return;
+  socket.emit('chat-message', { user: chatUsername, msg: inp.value.trim(), time: new Date().toLocaleTimeString() });
+  inp.value = '';
+}
+
+// ---- POSTS ----
+let allPostsAdmin = [];
+async function loadPosts() {
+  allPostsAdmin = await api('/api/posts');
+  document.getElementById('posts-table').innerHTML = allPostsAdmin.map(p => `
+    <tr>
+      <td style="max-width:220px;"><div style="font-weight:600;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.title}</div></td>
+      <td><span class="badge badge-${p.category}">${p.category}</span></td>
+      <td style="white-space:nowrap;">${fmtDate(p.date)}</td>
+      <td>${p.views||0}</td>
+      <td>${p.featured ? '⭐' : '-'}</td>
+      <td style="white-space:nowrap;">
+        <button class="btn btn-secondary btn-sm" onclick="editPost('${p.id}')">✏️ Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deletePost('${p.id}')">🗑</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">No posts yet</td></tr>';
+}
+
+function openPostModal(id) {
+  document.getElementById('post-id').value = '';
+  document.getElementById('p-title').value = '';
+  document.getElementById('p-content').value = '';
+  document.getElementById('p-cat').value = 'news';
+  document.getElementById('p-featured').checked = false;
+  document.getElementById('post-modal-title').textContent = 'New Post';
+  openModal('modal-post');
+}
+
+function editPost(id) {
+  const p = allPostsAdmin.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('post-id').value = p.id;
+  document.getElementById('p-title').value = p.title;
+  document.getElementById('p-content').value = p.content;
+  document.getElementById('p-cat').value = p.category;
+  document.getElementById('p-featured').checked = !!p.featured;
+  document.getElementById('post-modal-title').textContent = 'Edit Post';
+  openModal('modal-post');
+}
+
+async function savePost(e) {
+  e.preventDefault();
+  const id = document.getElementById('post-id').value;
+  const fd = new FormData();
+  fd.append('title', document.getElementById('p-title').value);
+  fd.append('content', document.getElementById('p-content').value);
+  fd.append('category', document.getElementById('p-cat').value);
+  fd.append('featured', document.getElementById('p-featured').checked);
+  const imgFile = document.getElementById('p-image').files[0];
+  if (imgFile) fd.append('image', imgFile);
+
+  const url = id ? `/api/posts/${id}` : '/api/posts';
+  const method = id ? 'PUT' : 'POST';
+  const r = await fetch(url, { method, body: fd });
+  const data = await r.json();
+  if (data.id || data.title) { toast('Post saved!', 'success'); closeModal('modal-post'); loadPosts(); loadDash(); }
+  else toast('Error saving post', 'error');
+}
+
+async function deletePost(id) {
+  if (!confirm('Delete this post?')) return;
+  await api(`/api/posts/${id}`, {method:'DELETE'});
+  toast('Post deleted', 'info'); loadPosts(); loadDash();
+}
+
+// ---- EVENTS ----
+let allEventsAdmin = [];
+async function loadEvents() {
+  allEventsAdmin = await api('/api/events');
+  document.getElementById('events-table').innerHTML = allEventsAdmin.map(e => `
+    <tr>
+      <td style="font-weight:600;color:var(--cream);">${e.title}</td>
+      <td>${fmtDate(e.date)}</td><td>${e.time}</td><td>${e.location}</td>
+      <td style="white-space:nowrap;">
+        <button class="btn btn-secondary btn-sm" onclick="editEvent('${e.id}')">✏️</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteEvent('${e.id}')">🗑</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem;">No events</td></tr>';
+}
+
+function openEventModal() {
+  ['ev-id','ev-title','ev-date','ev-time','ev-location','ev-desc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('event-modal-title').textContent = 'New Event';
+  openModal('modal-event');
+}
+
+function editEvent(id) {
+  const e = allEventsAdmin.find(x => x.id === id);
+  if (!e) return;
+  document.getElementById('ev-id').value = e.id;
+  document.getElementById('ev-title').value = e.title;
+  document.getElementById('ev-date').value = e.date;
+  document.getElementById('ev-time').value = e.time;
+  document.getElementById('ev-location').value = e.location;
+  document.getElementById('ev-desc').value = e.description || '';
+  document.getElementById('event-modal-title').textContent = 'Edit Event';
+  openModal('modal-event');
+}
+
+async function saveEvent() {
+  const id = document.getElementById('ev-id').value;
+  const body = {
+    title: document.getElementById('ev-title').value,
+    date: document.getElementById('ev-date').value,
+    time: document.getElementById('ev-time').value,
+    location: document.getElementById('ev-location').value,
+    description: document.getElementById('ev-desc').value
+  };
+  const url = id ? `/api/events/${id}` : '/api/events';
+  const method = id ? 'PUT' : 'POST';
+  const r = await api(url, { method, headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+  if (r.id || r.title) { toast('Event saved!', 'success'); closeModal('modal-event'); loadEvents(); loadDash(); }
+  else toast('Error saving event', 'error');
+}
+
+async function deleteEvent(id) {
+  if (!confirm('Delete this event?')) return;
+  await api(`/api/events/${id}`, {method:'DELETE'});
+  toast('Event deleted', 'info'); loadEvents(); loadDash();
+}
+
+// ---- GALLERY ----
+const galleryImgs = ['PPS BADGE.jpg','campus2.jpg','campus3.jpg','campus4.jpg','campus5.jpg','campus6.jpg','campus7.jpg','campus8.jpg','campus9.jpg','campus10.jpg','campus11.jpg','campus12.jpg','campus13.jpg','campus14.jpg','campus15.jpg','campus16.jpg','campus17.jpg','campus18.jpg','badge1.jpg','badge2.jpg','badge3.jpg','badge4.jpg','tour1.jpg','tour2.jpg','tour3.jpg','tour4.jpg','tour5.jpg','tour6.jpg','tour7.jpg','tour8.jpg','tour9.jpg'];
+function loadGallery() {
+  const grid = document.getElementById('gallery-img-grid');
+  grid.innerHTML = galleryImgs.map(img => `
+    <div style="position:relative; aspect-ratio:1; border-radius:8px; overflow:hidden; background:var(--bg3);">
+      <img src="/assets2/${img}" alt="" style="width:100%;height:100%;object-fit:cover;" onerror="this.closest('div').style.display='none'">
+    </div>`).join('');
+}
+async function uploadGalleryImages(input) {
+  const files = Array.from(input.files);
+  let ok = 0;
+  for (const f of files) {
+    const fd = new FormData(); fd.append('image', f);
+    const r = await fetch('/api/upload-gallery', {method:'POST', body:fd});
+    if (r.ok) ok++;
+  }
+  toast(`Uploaded ${ok} image(s)`, 'success');
+}
+
+// ---- ADMISSIONS ----
+let allAdmins = []; let admitFilter = 'all';
+async function loadAdmissions() {
+  allAdmins = await api('/api/admissions');
+  renderAdmissions();
+}
+function renderAdmissions() {
+  const list = admitFilter === 'all' ? allAdmins : allAdmins.filter(a => a.status === admitFilter);
+  document.getElementById('admissions-table').innerHTML = list.map(a => `
+    <tr>
+      <td style="font-weight:600;color:var(--cream);">${a.name}</td>
+      <td>${a.class||'-'}</td><td>${a.guardian||'-'}</td><td>${a.phone||'-'}</td>
+      <td style="white-space:nowrap;">${fmtDate(a.date)}</td>
+      <td><span class="badge badge-${a.status||'pending'}">${a.status||'pending'}</span></td>
+      <td style="white-space:nowrap;">
+        <button class="btn btn-success btn-sm" onclick="updateAdmit('${a.id}','approved')">✅</button>
+        <button class="btn btn-danger btn-sm" onclick="updateAdmit('${a.id}','rejected')">❌</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:2rem;">No applications</td></tr>';
+}
+async function updateAdmit(id, status) {
+  await api(`/api/admissions/${id}`, {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({status})});
+  toast('Status updated', 'success'); loadAdmissions(); updateBadges();
+}
+document.querySelectorAll('.filter-admit').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-admit').forEach(b => b.classList.remove('btn-primary')); 
+    btn.classList.add('btn-primary'); admitFilter = btn.dataset.status; renderAdmissions();
+  });
+});
+
+// ---- MESSAGES ----
+let allMsgs = [];
+async function loadMessages() {
+  allMsgs = await api('/api/messages');
+  document.getElementById('messages-table').innerHTML = allMsgs.map(m => `
+    <tr style="${!m.read?'background:rgba(201,146,58,0.04);':''}">
+      <td style="font-weight:600;color:var(--cream);">${m.name}${!m.read?' 🔵':''}</td>
+      <td>${m.email||'-'}</td><td>${m.subject||'-'}</td>
+      <td style="white-space:nowrap;">${fmtDate(m.date)}</td>
+      <td><span class="badge ${m.read?'badge-approved':'badge-pending'}">${m.read?'Read':'Unread'}</span></td>
+      <td style="white-space:nowrap;">
+        <button class="btn btn-secondary btn-sm" onclick="viewMsg('${m.id}')">👁 View</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteMsg('${m.id}')">🗑</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem;">No messages</td></tr>';
+}
+async function viewMsg(id) {
+  const m = allMsgs.find(x => x.id === id);
+  if (!m) return;
+  document.getElementById('msg-detail').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:0.75rem;">
+      <div><strong style="color:var(--muted);font-size:0.75rem;">FROM</strong><div style="color:var(--cream);margin-top:0.2rem;">${m.name} &lt;${m.email}&gt;</div></div>
+      <div><strong style="color:var(--muted);font-size:0.75rem;">SUBJECT</strong><div style="color:var(--cream);margin-top:0.2rem;">${m.subject||'No subject'}</div></div>
+      <div><strong style="color:var(--muted);font-size:0.75rem;">DATE</strong><div style="color:var(--cream);margin-top:0.2rem;">${fmtDate(m.date)}</div></div>
+      <div><strong style="color:var(--muted);font-size:0.75rem;">MESSAGE</strong><div style="color:var(--text);margin-top:0.5rem;line-height:1.7;background:var(--glass2);border-radius:var(--radius-sm);padding:1rem;">${m.message||'(empty)'}</div></div>
+      ${m.phone?`<div><strong style="color:var(--muted);font-size:0.75rem;">PHONE</strong><div style="color:var(--cream);margin-top:0.2rem;">${m.phone}</div></div>`:''}
+    </div>`;
+  await api(`/api/messages/${id}`, {method:'PUT'});
+  openModal('modal-msg'); loadMessages(); updateBadges();
+}
+async function deleteMsg(id) {
+  if (!confirm('Delete message?')) return;
+  await api(`/api/messages/${id}`, {method:'DELETE'});
+  toast('Message deleted','info'); loadMessages(); updateBadges();
+}
+
+// ---- STAFF ----
+let allStaffAdmin = [];
+async function loadStaff() {
+  allStaffAdmin = await api('/api/staff');
+  document.getElementById('staff-table').innerHTML = allStaffAdmin.map(s => `
+    <tr>
+      <td style="font-weight:600;color:var(--cream);">${s.name}</td>
+      <td>${s.role}</td><td>${s.dept}</td><td>${s.email||'-'}</td>
+      <td style="white-space:nowrap;">
+        <button class="btn btn-secondary btn-sm" onclick="editStaff('${s.id}')">✏️</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteStaff('${s.id}')">🗑</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem;">No staff</td></tr>';
+}
+function openStaffModal() {
+  ['sf-id','sf-name','sf-role','sf-email','sf-phone','sf-bio'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('staff-modal-title').textContent = 'Add Staff';
+  openModal('modal-staff');
+}
+function editStaff(id) {
+  const s = allStaffAdmin.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('sf-id').value = s.id;
+  document.getElementById('sf-name').value = s.name;
+  document.getElementById('sf-role').value = s.role;
+  document.getElementById('sf-dept').value = s.dept;
+  document.getElementById('sf-email').value = s.email || '';
+  document.getElementById('sf-phone').value = s.phone || '';
+  document.getElementById('sf-bio').value = s.bio || '';
+  document.getElementById('staff-modal-title').textContent = 'Edit Staff';
+  openModal('modal-staff');
+}
+async function saveStaff() {
+  const id = document.getElementById('sf-id').value;
+  const body = {
+    name: document.getElementById('sf-name').value,
+    role: document.getElementById('sf-role').value,
+    dept: document.getElementById('sf-dept').value,
+    email: document.getElementById('sf-email').value,
+    phone: document.getElementById('sf-phone').value,
+    bio: document.getElementById('sf-bio').value
+  };
+  const url = id ? `/api/staff/${id}` : '/api/staff';
+  const method = id ? 'PUT' : 'POST';
+  const r = await api(url, { method, headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+  if (r.id || r.name) { toast('Staff saved!', 'success'); closeModal('modal-staff'); loadStaff(); loadDash(); }
+  else toast('Error saving', 'error');
+}
+async function deleteStaff(id) {
+  if (!confirm('Remove this staff member?')) return;
+  await api(`/api/staff/${id}`, {method:'DELETE'});
+  toast('Staff removed', 'info'); loadStaff(); loadDash();
+}
+
+// ---- ANNOUNCEMENTS ----
+let anns = [];
+async function loadAnnouncements() {
+  anns = await api('/api/announcements');
+  renderAnnList();
+}
+function renderAnnList() {
+  document.getElementById('ann-list').innerHTML = anns.map((a,i) => `
+    <div style="display:flex;gap:0.5rem;align-items:center;background:var(--glass2);border-radius:var(--radius-sm);padding:0.65rem 0.9rem;">
+      <span style="flex:1;font-size:0.85rem;">• ${a}</span>
+      <button class="btn btn-danger btn-sm" onclick="anns.splice(${i},1);renderAnnList()">✕</button>
+    </div>`).join('') || '<div style="color:var(--muted);font-size:0.85rem;text-align:center;padding:1rem;">No announcements</div>';
+}
+function addAnnouncement() {
+  const v = document.getElementById('new-ann').value.trim();
+  if (!v) return;
+  anns.push(v); document.getElementById('new-ann').value = ''; renderAnnList();
+}
+async function saveAnnouncements() {
+  await api('/api/announcements', {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(anns)});
+  toast('Announcements published!', 'success');
+}
+
+// ---- SETTINGS ----
+async function loadSettings() {
+  const s = await api('/api/settings');
+  document.getElementById('set-name').value = s.school_name || '';
+  document.getElementById('set-tagline').value = s.tagline || '';
+  document.getElementById('set-phone').value = s.phone || '';
+  document.getElementById('set-wa').value = s.whatsapp || '';
+  document.getElementById('set-email').value = s.email || '';
+  document.getElementById('set-address').value = s.address || '';
+}
+async function saveSettings(e) {
+  e.preventDefault();
+  const body = {
+    school_name: document.getElementById('set-name').value,
+    tagline: document.getElementById('set-tagline').value,
+    phone: document.getElementById('set-phone').value,
+    whatsapp: document.getElementById('set-wa').value,
+    email: document.getElementById('set-email').value,
+    address: document.getElementById('set-address').value
+  };
+  await api('/api/settings', {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+  toast('Settings saved!', 'success');
+}
+
+// ---- STATS ----
+async function loadStats() {
+  const s = await api('/api/stats');
+  document.getElementById('st-students').value = s.students || '';
+  document.getElementById('st-bece').value = s.bece_rate || '';
+  document.getElementById('st-teachers').value = s.teachers || '';
+  document.getElementById('st-houses').value = s.houses || '';
+  document.getElementById('st-years').value = s.years || '';
+}
+async function saveStats(e) {
+  e.preventDefault();
+  const body = {
+    students: +document.getElementById('st-students').value,
+    bece_rate: +document.getElementById('st-bece').value,
+    teachers: +document.getElementById('st-teachers').value,
+    houses: +document.getElementById('st-houses').value,
+    years: +document.getElementById('st-years').value
+  };
+  await api('/api/stats', {method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)});
+  toast('Stats updated!', 'success');
+}
+
+// ---- START ----
+checkSession();
+
+// ---- CHANGE PASSWORD ----
+async function changePassword() {
+  const current = document.getElementById('pwd-current').value;
+  const newPass = document.getElementById('pwd-new').value;
+  const confirm = document.getElementById('pwd-confirm').value;
+  const alert = document.getElementById('pwd-alert');
+  if (!current || !newPass || !confirm) { alert.innerHTML = '<div class="alert alert-error">All fields required.</div>'; return; }
+  if (newPass.length < 6) { alert.innerHTML = '<div class="alert alert-error">Password must be at least 6 characters.</div>'; return; }
+  if (newPass !== confirm) { alert.innerHTML = '<div class="alert alert-error">Passwords do not match.</div>'; return; }
+  const r = await api('/api/auth/change-password', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({current, newPass}) });
+  if (r.success) {
+    alert.innerHTML = '<div class="alert alert-success">✅ Password updated successfully.</div>';
+    document.getElementById('pwd-current').value = '';
+    document.getElementById('pwd-new').value = '';
+    document.getElementById('pwd-confirm').value = '';
+  } else {
+    alert.innerHTML = `<div class="alert alert-error">${r.message || 'Failed to update password.'}</div>`;
+  }
+}
+</script>
+</body>
+</html>

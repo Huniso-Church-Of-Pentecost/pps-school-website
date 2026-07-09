@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found – Pentecost Preparatory School</title>
+  <meta name="theme-color" content="#04112a">
+  <link rel="icon" href="/assets2/PPS BADGE.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="/css/main.css">
+  <style>
+    .notfound { min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:2rem; }
+    .notfound-num { font-family:'Cormorant Garamond',serif; font-size:clamp(6rem,20vw,12rem); font-weight:700; color:var(--gold); line-height:1; opacity:0.4; }
+    .notfound-title { font-size:clamp(1.5rem,4vw,2.5rem); color:var(--cream); margin-bottom:1rem; }
+    .notfound-desc { color:rgba(253,248,240,0.55); max-width:400px; margin:0 auto 2.5rem; }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="/"><img src="/assets2/PPS BADGE.jpg" alt="PPS">Pentecost Preparatory School</a>
+  </div>
+</nav>
+<div class="notfound">
+  <div>
+    <div class="notfound-num">404</div>
+    <h1 class="notfound-title">Page Not Found</h1>
+    <p class="notfound-desc">The page you are looking for doesn't exist or has been moved.</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="/" class="btn btn-primary">🏠 Go Home</a>
+      <a href="/contact" class="btn btn-outline">Contact Us</a>
+    </div>
+  </div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>

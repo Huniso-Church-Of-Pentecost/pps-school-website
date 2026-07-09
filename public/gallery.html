@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery – Pentecost Preparatory School</title>
+  <meta name="theme-color" content="#04112a">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/assets2/PPS BADGE.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<div class="announce-bar"><div class="marquee-track" id="announce-text"><span>Loading...</span></div></div>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="/"><img src="/assets2/PPS BADGE.jpg" alt="PPS">Pentecost Preparatory School</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/">Home</a></li><li><a href="/admissions">Admissions</a></li>
+      <li><a href="/news">News &amp; Events</a></li><li><a href="/staff">Staff</a></li>
+      <li><a href="/badges">Badges</a></li><li><a href="/gallery" class="active">Gallery</a></li>
+      <li><a href="/tours">Tours</a></li><li><a href="/contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container page-hero-content">
+    <div class="breadcrumb"><a href="/">Home</a><span>/</span><span>Gallery</span></div>
+    <h1>Campus <span style="color:var(--gold)">Gallery</span></h1>
+    <p>A glimpse into life at Pentecost Preparatory School</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="gallery-grid" id="gallery-grid">
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="lb-img" src="" alt="">
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom"><span class="footer-copy">&copy; 2025 Pentecost Preparatory School</span></div>
+  </div>
+</footer>
+<div class="fab-wrap"><button class="fab-btn fab-wa" onclick="openWhatsApp()">💬</button><button class="fab-btn fab-call" onclick="callSchool()">📞</button></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/main.js"></script>
+<script>
+const images = [
+  'PPS BADGE.jpg','campus2.jpg','campus3.jpg','campus4.jpg','campus5.jpg','campus6.jpg',
+  'campus7.jpg','campus8.jpg','campus9.jpg','campus10.jpg','campus11.jpg','campus12.jpg',
+  'campus13.jpg','campus14.jpg','campus15.jpg','campus16.jpg','campus17.jpg','campus18.jpg',
+  'badge1.jpg','badge2.jpg','badge3.jpg','badge4.jpg',
+  'tour1.jpg','tour2.jpg','tour3.jpg','tour4.jpg','tour5.jpg','tour6.jpg','tour7.jpg','tour8.jpg','tour9.jpg'
+];
+const grid = document.getElementById('gallery-grid');
+grid.innerHTML = images.map(img => `
+  <div class="gallery-item reveal" onclick="openLightbox('/assets2/${img}')">
+    <img src="/assets2/${img}" alt="PPS Campus" loading="lazy" onerror="this.closest('.gallery-item').style.display='none'">
+  </div>
+`).join('');
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+</script>
+</body>
+</html>

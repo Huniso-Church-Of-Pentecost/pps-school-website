@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search – Pentecost Preparatory School</title>
+  <meta name="theme-color" content="#04112a">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/assets2/PPS BADGE.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<div class="announce-bar"><div class="marquee-track" id="announce-text"><span>Loading...</span></div></div>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="/"><img src="/assets2/PPS BADGE.jpg" alt="PPS">Pentecost Preparatory School</a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/">Home</a></li><li><a href="/admissions">Admissions</a></li>
+      <li><a href="/news">News</a></li><li><a href="/staff">Staff</a></li>
+      <li><a href="/gallery">Gallery</a></li><li><a href="/contact">Contact</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="page-hero">
+  <div class="container page-hero-content">
+    <h1>Search <span style="color:var(--gold)">Results</span></h1>
+  </div>
+</div>
+<section class="section">
+  <div class="container">
+    <div style="max-width:560px; margin-bottom:2.5rem;" class="reveal">
+      <div style="display:flex; gap:0.75rem;">
+        <input type="text" id="search-input" placeholder="Search posts, events..." style="flex:1;" oninput="doSearch()">
+        <button class="btn btn-primary" onclick="doSearch()">Search</button>
+      </div>
+    </div>
+    <div id="search-results">
+      <p style="color:rgba(253,248,240,0.5);">Type to search...</p>
+    </div>
+  </div>
+</section>
+<footer class="footer"><div class="container"><div class="footer-bottom"><span class="footer-copy">&copy; 2025 Pentecost Preparatory School</span></div></div></footer>
+<div class="fab-wrap"><button class="fab-btn fab-wa" onclick="openWhatsApp()">💬</button><button class="fab-btn fab-call" onclick="callSchool()">📞</button></div>
+<script src="/socket.io/socket.io.js"></script><script src="/js/main.js"></script>
+<script>
+// Pre-fill from URL param
+const urlQ = new URLSearchParams(location.search).get('q');
+if (urlQ) { document.getElementById('search-input').value = urlQ; doSearch(); }
+
+let debounce;
+async function doSearch() {
+  clearTimeout(debounce);
+  debounce = setTimeout(async () => {
+    const q = document.getElementById('search-input').value.trim();
+    const el = document.getElementById('search-results');
+    if (!q) { el.innerHTML = '<p style="color:rgba(253,248,240,0.5);">Type to search...</p>'; return; }
+    el.innerHTML = '<div class="spinner"></div>';
+    const r = await fetch('/api/search?q=' + encodeURIComponent(q));
+    const data = await r.json();
+    let html = '';
+    if (data.posts.length) {
+      html += `<h2 style="color:var(--gold2); font-size:1.1rem; margin-bottom:1rem;">📰 Posts (${data.posts.length})</h2>`;
+      html += '<div class="grid-auto" style="margin-bottom:2rem;">' + data.posts.map(p => `
+        <a href="/news/${p.id}" style="text-decoration:none;">
+          <div class="post-card">
+            <div class="post-card-img">${p.image?`<img src="${p.image}" loading="lazy">`:'📰'}</div>
+            <div class="post-card-body">
+              <span class="post-category cat-${p.category}">${p.category}</span>
+              <div class="post-card-title">${p.title}</div>
+              <div class="post-date">${formatDate(p.date)}</div>
+            </div>
+          </div></a>`).join('') + '</div>';
+    }
+    if (data.events.length) {
+      html += `<h2 style="color:var(--gold2); font-size:1.1rem; margin-bottom:1rem;">📅 Events (${data.events.length})</h2>`;
+      html += data.events.map(e => {
+        const d = new Date(e.date);
+        return `<div class="event-item" style="margin-bottom:0.75rem;">
+          <div class="event-date-box"><div class="day">${d.getDate()}</div><div class="mon">${d.toLocaleString('en',{month:'short'})}</div></div>
+          <div class="event-info"><h4>${e.title}</h4><p>${e.description||''}</p><div class="event-meta"><span>🕒 ${e.time}</span><span>📍 ${e.location}</span></div></div>
+        </div>`;
+      }).join('');
+    }
+    if (!data.posts.length && !data.events.length) html = `<p style="color:rgba(253,248,240,0.5);">No results found for "<strong>${q}</strong>".</p>`;
+    el.innerHTML = html;
+  }, 300);
+}
+</script>
+</body>
+</html>

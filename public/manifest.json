@@ -1,0 +1,21 @@
+{
+  "name": "Pentecost Preparatory School",
+  "short_name": "PPS",
+  "description": "Official website of Pentecost Preparatory School – God Our Victory",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#04112a",
+  "theme_color": "#04112a",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/assets2/PPS BADGE.jpg", "sizes": "192x192", "type": "image/jpeg", "purpose": "any maskable" },
+    { "src": "/assets2/PPS BADGE.jpg", "sizes": "512x512", "type": "image/jpeg", "purpose": "any maskable" }
+  ],
+  "categories": ["education"],
+  "lang": "en",
+  "shortcuts": [
+    { "name": "Admissions", "short_name": "Apply", "url": "/admissions", "description": "Apply for admission" },
+    { "name": "News", "short_name": "News", "url": "/news", "description": "Latest news and events" },
+    { "name": "Contact", "short_name": "Contact", "url": "/contact", "description": "Contact the school" }
+  ]
+}
