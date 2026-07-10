@@ -30,7 +30,7 @@ app.use(session({
   cookie:{maxAge:86400000}
 }));
 
-app.use(express.static(path.join(__dirname,'../public')));
+app.use(express.static(path.join(process.cwd(), 'public')));
 
 
 const storage = multer.diskStorage({
